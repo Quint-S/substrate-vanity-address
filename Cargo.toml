@@ -1,0 +1,18 @@
+[package]
+name = "substrate-vanity-address"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+sp-core = "34.0.0"
+sp-io = "36.0.0"
+regex = "1.5"
+hex = "0.4"
+crossbeam = "0.8"
+num_cpus = "1.16.0"
+bip39 = "2.0"
+ctrlc = "3.2"
+atomic-counter = "1.0.1"
+ansi_term = "0.12"
+lazy_static = "1.4"
+term_size = "0.3"
