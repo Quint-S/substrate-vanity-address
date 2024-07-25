@@ -69,7 +69,6 @@ fn main() {
                 if vanity_pattern.is_match(&address) {
                     println!("Generated: {:?} addresses", counter.load(Ordering::SeqCst));
                     sender.send((address, seed)).unwrap();
-                    break;
                 }
             }
         });
