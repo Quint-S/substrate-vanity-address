@@ -38,7 +38,7 @@ This project is a Substrate vanity address generator written in Rust. It generat
 Clone the repository:
 
 ```sh
-git clone https://github.com/your-username/substrate-vanity-address.git
+git clone https://github.com/Quint-S/substrate-vanity-address.git
 cd substrate-vanity-address
 ```
 
