@@ -19,6 +19,11 @@ lazy_static! {
         let pattern = &args[1];
         Regex::new(pattern).expect("Invalid regex pattern")
     };
+    
+    static ref USE_MNEMONIC: bool = {
+        let args: Vec<String> = env::args().collect();
+        args.iter().any(|arg| arg == "--mnemonic")
+    };
 }
 
 fn print_horizontal_line() {
@@ -54,6 +59,7 @@ fn main() {
     let counter = Arc::new(AtomicUsize::new(0));
 
     let counter_clone = Arc::clone(&counter);
+    println!("Running on {} cpu cores...", num_threads);
     for _ in 0..num_threads {
         let vanity_pattern = vanity_pattern.clone();
         let sender = sender.clone();
@@ -61,7 +67,14 @@ fn main() {
 
         thread::spawn(move || {
             loop {
-                let (pair, seed) = sr25519::Pair::generate();
+                let (pair, seed) = if *USE_MNEMONIC {
+                    let (pair, phrase, _seed) = sr25519::Pair::generate_with_phrase(None);
+                    (pair, phrase)
+                } else {
+                    let (pair, seed) = sr25519::Pair::generate();
+                    let seed_hex = hex::encode(seed);
+                    (pair, seed_hex)
+                };
                 let public = pair.public();
                 let address = public.to_ss58check();
                 counter.fetch_add(1, Ordering::SeqCst);
@@ -85,7 +98,11 @@ fn main() {
 
         print!("Vanity Address Found: ");
         highlight_match(&*address);
-        println!("Secret Seed: 0x{}", hex::encode(seed));
+        if *USE_MNEMONIC {
+            println!("Mnemonic: {}", seed);
+        } else {
+            println!("Secret Seed: 0x{}", seed);
+        }
         println!("Time elapsed: {:.2?}", elapsed_time);
         print_horizontal_line();
     }

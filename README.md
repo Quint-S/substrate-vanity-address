@@ -50,6 +50,8 @@ cargo run -- "(?i)(pepe|frog)"
 ```
 The (?i) at the beginning of the regex pattern makes it case-insensitive. 
 
+You can add the command-line argument "--mnemonic" if you want it to generate mnemonic seed phrases instead, however this is <b>much</b> slower!
+
 ## Example output
 <pre>
 Generated: 21411 addresses
